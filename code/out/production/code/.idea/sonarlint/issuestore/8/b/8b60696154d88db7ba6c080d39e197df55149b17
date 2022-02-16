@@ -1,0 +1,7 @@
+
+q
+java:S41440"[Update this method so that its implementation is not identical to "getNickName" on line 38.(í›¤ö
+k
+java:S12018"UEither override Object.equals(Object), or rename the method to prevent any confusion.(ö˜ï›
+0
+java:S1220""Move this file to a named package.

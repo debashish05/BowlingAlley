@@ -1,0 +1,15 @@
+
+E
+java:S3740#"/Provide the parametrized type for this generic.(ª™Æç
+E
+java:S37401"/Provide the parametrized type for this generic.(ß²ìý
+K
+java:S3740A"/Provide the parametrized type for this generic.(²çµW8ô˜†–ð/
+7
+java:S1116b"Remove this empty statement.(ôŸŽìúÿÿÿÿ
+{
+java:S13191"eThe type of "theScore" should be an interface such as "Map" rather than the implementation "HashMap".(ß²ìý
+‰
+java:S1319A"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(²çµW8Š™†–ð/
+0
+java:S1220""Move this file to a named package.

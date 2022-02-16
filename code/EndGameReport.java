@@ -13,14 +13,12 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 
 import java.util.*;
-import java.text.*;
 
 public class EndGameReport implements ActionListener, ListSelectionListener {
 
 	private JFrame win;
 	private JButton printButton, finished;
 	private JList memberList;
-	private Vector myVector;
 	private Vector retVal;
 
 	private int result;
@@ -53,7 +51,6 @@ public class EndGameReport implements ActionListener, ListSelectionListener {
 		memberList.setVisibleRowCount(5);
 		memberList.addListSelectionListener(this);
 		JScrollPane partyPane = new JScrollPane(memberList);
-		//        partyPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		partyPanel.add(partyPane);
 
 		partyPanel.add( memberList );
@@ -63,7 +60,7 @@ public class EndGameReport implements ActionListener, ListSelectionListener {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(2, 1));
 
-		Insets buttonMargin = new Insets(4, 4, 4, 4);
+		//Insets buttonMargin = new Insets(4, 4, 4, 4);
 
 		printButton = new JButton("Print Report");
 		JPanel printButtonPanel = new JPanel();
@@ -131,12 +128,14 @@ public class EndGameReport implements ActionListener, ListSelectionListener {
 
 	public static void main( String args[] ) {
 		Vector bowlers = new Vector();
+		String s="aaaaa";
 		for ( int i=0; i<4; i++ ) {
-			bowlers.add( new Bowler( "aaaaa", "aaaaa", "aaaaa" ) );
+
+			bowlers.add( new Bowler( s, s, s ) );
 		}
-		Party party = new Party( bowlers );
-		String partyName="wank";
-		EndGameReport e = new EndGameReport( partyName, party );
+		//Party party = new Party( bowlers );
+		//String partyName="wank";
+		//EndGameReport e = new EndGameReport( partyName, party );
 	}
 	
 }

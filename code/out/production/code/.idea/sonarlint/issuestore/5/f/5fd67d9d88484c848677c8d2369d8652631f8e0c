@@ -1,0 +1,15 @@
+
+J
+java:S3740"/Provide the parametrized type for this generic.(ÍšÉÅýÿÿÿÿ
+J
+java:S3740"/Provide the parametrized type for this generic.(ží¥¿øÿÿÿÿ
+J
+java:S3740*"/Provide the parametrized type for this generic.(¦ñ«úúÿÿÿÿ
+€
+java:S1149"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ÍšÉÅýÿÿÿÿ
+V
+java:S2134"@Don't extend "Thread", since the "run" method is not overridden.(«¯¡„
+Y
+java:S1155)">Use isEmpty() to check whether the collection is empty or not.(ˆ²Èýùÿÿÿÿ
+0
+java:S1220""Move this file to a named package.
