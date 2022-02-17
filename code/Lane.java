@@ -148,6 +148,7 @@ public class Lane extends Thread implements PinsetterObserver {
 	private int ball;
 	private int bowlIndex;
 	private int frameNumber;
+	private boolean tenthFrameStrike;
 
 	private int[] curScores;
 	private ScoreCalculator currentCumulScores;
@@ -257,7 +258,7 @@ public class Lane extends Thread implements PinsetterObserver {
 			partyAssigned = false;
 			Iterator scoreIt = party.getMembers().iterator();
 			party = null;
-
+			partyAssigned = false;
 			laneSubscriber.publish(lanePublish());
 
 			int myIndex = 0;

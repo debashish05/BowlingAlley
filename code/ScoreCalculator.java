@@ -63,7 +63,32 @@ public class ScoreCalculator {
         return true;
     }
 
-    public int getScore(int frame, int ball, int[] curScore) {      //remove return type,remove total score
+    public boolean scoreHelper(int i, int current, int[] curScore) {
+
+        int now_score = curScore[i];
+
+        if (i % 2 == 1 && i < 19) {
+            if (now_score == -2 && curScore[i - 1] == -2) {
+                calculateCummulativeScore(i, curScore, current);
+            } else if (now_score + curScore[i - 1] == 10 && i < current - 1) {
+
+                // This ball was a the second of a spare.
+                // Also, we're not on the current ball.
+                // Add the next ball to the ith one in cumul.
+                cumulScores[bowlIndex][i / 2] += curScore[i + 1] + now_score;
+            }
+        } else if (i < current && i % 2 == 0 && now_score == 10 && i < 18 && checkStrike(i, curScore)) {
+            // This ball is the first ball, and was a strike.
+            // If we can get 2 balls after it, good add them to cumul.
+            return true;
+        } else {
+            // We're dealing with a normal throw, add it and be on our way.
+            normal(curScore, i);
+        }
+        return false;
+    }
+
+    public int getScore(int frame, int ball, int[] curScore) { // remove return type,remove total score
         int totalScore = 0;
         for (int i = 0; i < 10; i++) {
             cumulScores[bowlIndex][i] = 0;
@@ -73,23 +98,8 @@ public class ScoreCalculator {
         // Iterate through each ball until the current one.
 
         for (int i = 0; i < current + 2; i++) {
-            int now_score = curScore[i];
-            if (i % 2 == 1 && now_score == -2 && curScore[i - 1] == -2 && i < 19) {
-                calculateCummulativeScore(i, curScore, current);
-            } else if (i % 2 == 1 && now_score + curScore[i - 1] == 10 && i < (current - 1) && i < 19) {
-
-                // This ball was a the second of a spare.
-                // Also, we're not on the current ball.
-                // Add the next ball to the ith one in cumul.
-                cumulScores[bowlIndex][(i / 2)] += curScore[i + 1] + now_score;
-            } else if (i < current && i % 2 == 0 && now_score == 10 && i < 18 && checkStrike(i, curScore)) {
-                // This ball is the first ball, and was a strike.
-                // If we can get 2 balls after it, good add them to cumul.
+            if (scoreHelper(i, current, curScore))
                 break;
-            } else {
-                // We're dealing with a normal throw, add it and be on our way.
-                normal(curScore, i);
-            }
         }
 
         return totalScore;
