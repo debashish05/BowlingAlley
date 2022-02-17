@@ -1,8 +1,5 @@
-/**
- * 
- * SMTP implementation based on code by Réal Gagnon mailto:real@rgagnon.com
- * 
- */
+/** 
+ **/
 
 
 import java.io.*;
