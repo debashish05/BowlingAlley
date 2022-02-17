@@ -119,6 +119,18 @@ public class LaneView implements LaneObserver, ActionListener {
 		return panel;
 	}
 
+	public String calculateText(int curr_score, int i, int prev_score) {
+		String text = "";
+		if (curr_score == 10 && (i % 2 == 0 || i == 19)) {
+			text = "X";
+		} else if (curr_score + prev_score == 10 && i % 2 == 1) {
+			text = "F";
+		} else {
+			text = Integer.toString(curr_score);
+		}
+		return text;
+	}
+
 	public void receiveLaneEvent(LaneEvent le) {
 		if (lane.isPartyAssigned()) {
 			int numBowlers = le.getParty().getMembers().size();
@@ -167,14 +179,9 @@ public class LaneView implements LaneObserver, ActionListener {
 					}
 
 					if (curr_score != -1) {
-						if (curr_score == 10 && (i % 2 == 0 || i == 19)) {
-							ballLabel[k][i].setText("X");
-						} else if (curr_score + prev_score == 10 && i % 2 == 1) {
-							ballLabel[k][i].setText("F");
-						} else {
-							ballLabel[k][i].setText(Integer.toString(curr_score));
-						}
+						ballLabel[k][i].setText(calculateText(curr_score, i, prev_score));
 					}
+
 				}
 			}
 
