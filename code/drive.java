@@ -1,6 +1,3 @@
-import java.util.Vector;
-import java.io.*;
-
 public class drive {
 
 	public static void main(String[] args) {
@@ -8,9 +5,7 @@ public class drive {
 		int numLanes = 3;
 		int maxPatronsPerParty=5;
 
-		// Alley a = new Alley( numLanes );
 		ControlDesk controlDesk = new ControlDesk( numLanes ) ;
-		// a.getControlDesk();
 
 		ControlDeskView cdv = new ControlDeskView( controlDesk, maxPatronsPerParty);
 		controlDesk.subscribe( cdv );
