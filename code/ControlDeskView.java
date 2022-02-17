@@ -57,23 +57,25 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 
 		addParty = new JButton("Add Party");
 		JPanel addPartyPanel = new JPanel();
-		addPartyPanel.setLayout(new FlowLayout());
-		addParty.addActionListener(this);
-		addPartyPanel.add(addParty);
+		createObjects(addParty, addPartyPanel,this);
+		// addPartyPanel.setLayout(new FlowLayout());
+		// addParty.addActionListener(this);
+		// addPartyPanel.add(addParty);
 		controlsPanel.add(addPartyPanel);
 
-		assign = new JButton("Assign Lanes");
-		JPanel assignPanel = new JPanel();
-		assignPanel.setLayout(new FlowLayout());
-		assign.addActionListener(this);
-		assignPanel.add(assign);
-//		controlsPanel.add(assignPanel);
+		// assign = new JButton("Assign Lanes");
+		// JPanel assignPanel = new JPanel();
+		// assignPanel.setLayout(new FlowLayout());
+		// assign.addActionListener(this);
+		// assignPanel.add(assign);
+		//controlsPanel.add(assignPanel);
 
 		finished = new JButton("Finished");
 		JPanel finishedPanel = new JPanel();
-		finishedPanel.setLayout(new FlowLayout());
-		finished.addActionListener(this);
-		finishedPanel.add(finished);
+		createObjects(finished, finishedPanel,this);
+		// finishedPanel.setLayout(new FlowLayout());
+		// finished.addActionListener(this);
+		// finishedPanel.add(finished);
 		controlsPanel.add(finishedPanel);
 
 		// Lane Status Panel
@@ -139,6 +141,13 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 			((screenSize.height) / 2) - ((win.getSize().height) / 2));
 		win.show();
 
+
+	}
+	private void createObjects(JButton button,JPanel panel,ControlDeskView ob)
+	{
+		panel.setLayout(new FlowLayout());
+		button.addActionListener(ob);
+		panel.add(button);
 	}
 
 	/**
