@@ -1,13 +1,3 @@
-/*
- * PinSetterView/.java
- *
- * Version:
- *   $Id$
- *
- * Revision:
- *   $Log$
- */
-
 /**
  *  constructs a prototype PinSetter GUI
  *
