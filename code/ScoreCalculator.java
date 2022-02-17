@@ -63,6 +63,10 @@ public class ScoreCalculator {
         return true;
     }
 
+    public boolean stopCondition(int i, int current, int curScore[]) {
+        return (i < current && i % 2 == 0 && curScore[i] == 10 && i < 18 && checkStrike(i, curScore));
+    }
+
     public boolean scoreHelper(int i, int current, int[] curScore) {
 
         int now_score = curScore[i];
@@ -77,7 +81,7 @@ public class ScoreCalculator {
                 // Add the next ball to the ith one in cumul.
                 cumulScores[bowlIndex][i / 2] += curScore[i + 1] + now_score;
             }
-        } else if (i < current && i % 2 == 0 && now_score == 10 && i < 18 && checkStrike(i, curScore)) {
+        } else if (stopCondition(i, current, curScore)) {
             // This ball is the first ball, and was a strike.
             // If we can get 2 balls after it, good add them to cumul.
             return true;
