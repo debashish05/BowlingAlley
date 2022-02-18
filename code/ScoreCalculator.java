@@ -123,9 +123,9 @@ public class ScoreCalculator {
         } else if (i < 22) {
 
             cumulScores[bowlIndex][9] += add;
-        }
-        if (i == 18) {
-            cumulScores[bowlIndex][9] += cumulScores[bowlIndex][8];
+            if (i == 18) {
+                cumulScores[bowlIndex][i/2] += cumulScores[bowlIndex][i/2-1];
+            }
         }
     }
 
@@ -133,20 +133,23 @@ public class ScoreCalculator {
         // Add up the strike.
         // Add the next two balls to the current cumulscore.
         cumulScores[bowlIndex][i / 2] += 10;
+        int add=0;
         if (curScore[i + 1] != -1) {
-            int add = (curScore[i + 1] != -2) ? curScore[i + 1] : 0;
+            add = (curScore[i + 1] != -2) ? curScore[i + 1] : 0;
             cumulScores[bowlIndex][i / 2] += add + cumulScores[bowlIndex][(i / 2) - 1];
+            add=0;
             if (curScore[i + 2] != -1 && curScore[i + 2] != -2) {
                 add = (curScore[i + 2] != -2) ? curScore[i + 2] : 0;
-                cumulScores[bowlIndex][(i / 2)] += add;
             } else if (curScore[i + 3] != -2) {
                 add = (curScore[i + 3] != -2) ? curScore[i + 3] : 0;
-                cumulScores[bowlIndex][(i / 2)] += add;
             }
+            cumulScores[bowlIndex][(i / 2)] += add;
         } else {
-            int add = (i / 2 > 0) ? cumulScores[bowlIndex][(i / 2) - 1] : 0;
+            add = (i / 2 > 0) ? cumulScores[bowlIndex][(i / 2) - 1] : 0;
             int add1 = (curScore[i + 2] != -2) ? curScore[i + 2] : 0;
-            cumulScores[bowlIndex][i / 2] += add1 + add;
+            cumulScores[bowlIndex][i / 2] += add1; 
+            cumulScores[bowlIndex][i / 2] += add;
+
             int id = 4;
             if (curScore[i + 3] != -1 && curScore[i + 3] != -2) {
                 id = 3;
@@ -154,5 +157,4 @@ public class ScoreCalculator {
             cumulScores[bowlIndex][(i / 2)] += curScore[i + id];
         }
     }
-
 }
