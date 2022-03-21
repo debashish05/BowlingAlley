@@ -1,5 +1,3 @@
-// nikita 
-
 /* AddPartyView.java
  *
  *  Version:
@@ -107,19 +105,32 @@ public class AddPartyView implements ActionListener, ListSelectionListener {
 
 		addPatron = new JButton("Add to Party");
 		JPanel addPatronPanel = new JPanel();
-		createObjects(addPatron, addPatronPanel, this, buttonPanel);
+		addPatronPanel.setLayout(new FlowLayout());
+		addPatron.addActionListener(this);
+		addPatronPanel.add(addPatron);
 
 		remPatron = new JButton("Remove Member");
 		JPanel remPatronPanel = new JPanel();
-		createObjects(remPatron, remPatronPanel, this, buttonPanel);
+		remPatronPanel.setLayout(new FlowLayout());
+		remPatron.addActionListener(this);
+		remPatronPanel.add(remPatron);
 
 		newPatron = new JButton("New Patron");
 		JPanel newPatronPanel = new JPanel();
-		createObjects(newPatron, newPatronPanel, this, buttonPanel);
+		newPatronPanel.setLayout(new FlowLayout());
+		newPatron.addActionListener(this);
+		newPatronPanel.add(newPatron);
 
 		finished = new JButton("Finished");
 		JPanel finishedPanel = new JPanel();
-		createObjects(finished, finishedPanel, this, buttonPanel);
+		finishedPanel.setLayout(new FlowLayout());
+		finished.addActionListener(this);
+		finishedPanel.add(finished);
+
+		buttonPanel.add(addPatronPanel);
+		buttonPanel.add(remPatronPanel);
+		buttonPanel.add(newPatronPanel);
+		buttonPanel.add(finishedPanel);
 
 		// Clean up main panel
 		colPanel.add(partyPanel);
@@ -139,36 +150,20 @@ public class AddPartyView implements ActionListener, ListSelectionListener {
 
 	}
 
-	private void createObjects(JButton button, JPanel panel, AddPartyView ob, JPanel buttonPanel) {
-		panel.setLayout(new FlowLayout());
-		button.addActionListener(ob);
-		panel.add(button);
-		buttonPanel.add(panel);
-	}
-
-	public void addParty(ActionEvent e) {
-
-		if (party.contains(selectedNick)) {
-			System.err.println("Member already in Party");
-		} else {
-			party.add(selectedNick);
-			partyList.setListData(party);
-		}
-
-	}
-
 	public void actionPerformed(ActionEvent e) {
-
-		if (e.getSource().equals(addPatron) && selectedNick != null && party.size() < maxSize)
-			addParty(e);
-
+		if (e.getSource().equals(addPatron) && selectedNick != null && party.size() < maxSize) {
+			if (party.contains(selectedNick)) {
+				System.err.println("Member already in Party");
+			} else {
+				party.add(selectedNick);
+				partyList.setListData(party);
+			}
+		}
 		if (e.getSource().equals(remPatron) && selectedMember != null) {
 			party.removeElement(selectedMember);
 			partyList.setListData(party);
 		}
-		if (e.getSource().equals(newPatron)) {
-			NewPatronView newPatron = new NewPatronView(this);
-		}
+
 		if (e.getSource().equals(finished)) {
 			if (party != null && !party.isEmpty()) {
 				controlDesk.updateAddParty(this);
@@ -195,6 +190,7 @@ public class AddPartyView implements ActionListener, ListSelectionListener {
 	/**
 	 * Accessor for Party
 	 */
+
 
 	/**
 	 * Called by NewPatronView to notify AddPartyView to update

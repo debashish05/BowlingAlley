@@ -131,55 +131,6 @@ public class LaneView implements LaneObserver, ActionListener {
 		return text;
 	}
 
-	public void makeFrame(LaneEvent le) {
-
-		if (!(le.getFrameNum() == 1 && le.getBall() == 0 && le.getIndex() == 0))
-			return;
-
-		System.out.println("Making the frame.");
-		cpanel.removeAll();
-		cpanel.add(makeFrame(le.getParty()), "Center");
-
-		// Button Panel
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout());
-
-		maintenance = new JButton("Maintenance Call");
-		JPanel maintenancePanel = new JPanel();
-		maintenancePanel.setLayout(new FlowLayout());
-		maintenance.addActionListener(this);
-		maintenancePanel.add(maintenance);
-
-		buttonPanel.add(maintenancePanel);
-
-		cpanel.add(buttonPanel, "South");
-
-		frame.pack();
-	}
-
-	public void score(LaneEvent le, int numBowlers) {
-		int[][] lescores = le.getCumulScore();
-		for (int k = 0; k < numBowlers; k++) {
-			for (int i = 0; i < le.getFrameNum(); i++) {
-				if (lescores[k][i] != 0)
-					scoreLabel[k][i].setText((new Integer(lescores[k][i])).toString());
-			}
-			for (int i = 0; i < 21; i++) {
-
-				int curr_score = ((int[]) (le.getScore()).get(bowlers.get(k)))[i];
-				int prev_score = 0;
-				if (i > 0) {
-					prev_score = ((int[]) (le.getScore()).get(bowlers.get(k)))[i - 1];
-				}
-
-				if (curr_score != -1) {
-					ballLabel[k][i].setText(calculateText(curr_score, i, prev_score));
-				}
-
-			}
-		}
-	}
-
 	public void receiveLaneEvent(LaneEvent le) {
 		if (lane.isPartyAssigned()) {
 			int numBowlers = le.getParty().getMembers().size();
@@ -190,8 +141,49 @@ public class LaneView implements LaneObserver, ActionListener {
 				}
 			}
 
-			makeFrame(le);
-			score(le,numBowlers);
+			if (le.getFrameNum() == 1 && le.getBall() == 0 && le.getIndex() == 0) {
+				System.out.println("Making the frame.");
+				cpanel.removeAll();
+				cpanel.add(makeFrame(le.getParty()), "Center");
+
+				// Button Panel
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.setLayout(new FlowLayout());
+
+				maintenance = new JButton("Maintenance Call");
+				JPanel maintenancePanel = new JPanel();
+				maintenancePanel.setLayout(new FlowLayout());
+				maintenance.addActionListener(this);
+				maintenancePanel.add(maintenance);
+
+				buttonPanel.add(maintenancePanel);
+
+				cpanel.add(buttonPanel, "South");
+
+				frame.pack();
+
+			}
+
+			int[][] lescores = le.getCumulScore();
+			for (int k = 0; k < numBowlers; k++) {
+				for (int i = 0; i <= le.getFrameNum() - 1; i++) {
+					if (lescores[k][i] != 0)
+						scoreLabel[k][i].setText((new Integer(lescores[k][i])).toString());
+				}
+				for (int i = 0; i < 21; i++) {
+
+					int curr_score = ((int[]) ((HashMap) le.getScore()).get(bowlers.get(k)))[i];
+					int prev_score = 0;
+					if (i > 0) {
+						prev_score = ((int[]) ((HashMap) le.getScore()).get(bowlers.get(k)))[i - 1];
+					}
+
+					if (curr_score != -1) {
+						ballLabel[k][i].setText(calculateText(curr_score, i, prev_score));
+					}
+
+				}
+			}
 
 		}
 	}
