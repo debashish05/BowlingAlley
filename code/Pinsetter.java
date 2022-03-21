@@ -146,7 +146,7 @@ public class Pinsetter {
 				}
 			}
 		}
-
+		
 		if(count == 10){
 			Smiley s = new Smiley(0);
 			s = null;
@@ -155,7 +155,7 @@ public class Pinsetter {
 			Smiley s = new Smiley(1);
 			s = null;
 		}
-
+		
 		try {
 			Thread.sleep(1);				// pinsetter is where delay will be in a real game
 		} catch (Exception e) {}

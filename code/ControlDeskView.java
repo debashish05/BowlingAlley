@@ -17,7 +17,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 
 import java.util.*;
 
@@ -57,23 +56,13 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 
 		addParty = new JButton("Add Party");
 		JPanel addPartyPanel = new JPanel();
-		addPartyPanel.setLayout(new FlowLayout());
-		addParty.addActionListener(this);
-		addPartyPanel.add(addParty);
+		createObjects(addParty, addPartyPanel,this);
+	
 		controlsPanel.add(addPartyPanel);
-
-		assign = new JButton("Assign Lanes");
-		JPanel assignPanel = new JPanel();
-		assignPanel.setLayout(new FlowLayout());
-		assign.addActionListener(this);
-		assignPanel.add(assign);
-//		controlsPanel.add(assignPanel);
 
 		finished = new JButton("Finished");
 		JPanel finishedPanel = new JPanel();
-		finishedPanel.setLayout(new FlowLayout());
-		finished.addActionListener(this);
-		finishedPanel.add(finished);
+		createObjects(finished, finishedPanel,this);
 		controlsPanel.add(finishedPanel);
 
 		// Lane Status Panel
@@ -88,11 +77,8 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 			Lane curLane = (Lane) it.next();
 			LaneStatusView laneStat = new LaneStatusView(curLane,(laneCount+1));
 			
-			//curLane.subscribe(laneStat);
-			//((Pinsetter)curLane.getPinsetter()).subscribe(laneStat);
-			
 			curLane.laneSubscriber.subscribe(laneStat);
-			((Pinsetter)curLane.getPinsetter()).subscribe(laneStat);
+			(curLane.getPinsetter()).subscribe(laneStat);
 			
 			JPanel lanePanel = laneStat.showLane();
 			lanePanel.setBorder(new TitledBorder("Lane" + ++laneCount ));
@@ -114,7 +100,6 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 		partyPane.setVerticalScrollBarPolicy(
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		partyPanel.add(partyPane);
-		//		partyPanel.add(partyList);
 
 		// Clean up main panel
 		colPanel.add(controlsPanel, "East");
@@ -139,6 +124,13 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 			((screenSize.height) / 2) - ((win.getSize().height) / 2));
 		win.show();
 
+
+	}
+	private void createObjects(JButton button,JPanel panel,ControlDeskView ob)
+	{
+		panel.setLayout(new FlowLayout());
+		button.addActionListener(ob);
+		panel.add(button);
 	}
 
 	/**
@@ -180,6 +172,6 @@ public class ControlDeskView implements ActionListener, ControlDeskObserver {
 	 */
 
 	public void receiveControlDeskEvent(ControlDeskEvent ce) {
-		partyList.setListData(((Vector) ce.getPartyQueue()));
+		partyList.setListData((ce.getPartyQueue()));
 	}
 }

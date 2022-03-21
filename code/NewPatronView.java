@@ -20,14 +20,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
-
-import java.util.*;
-import java.text.*;
 
 public class NewPatronView implements ActionListener {
-
-	private int maxSize;
 
 	private JFrame win;
 	private JButton abort, finished;
@@ -37,7 +31,6 @@ public class NewPatronView implements ActionListener {
 
 	private boolean done;
 
-	private String selectedNick, selectedMember;
 	private AddPartyView addParty;
 
 	public NewPatronView(AddPartyView v) {
@@ -85,8 +78,6 @@ public class NewPatronView implements ActionListener {
 		// Button Panel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(4, 1));
-
-		Insets buttonMargin = new Insets(4, 4, 4, 4);
 
 		finished = new JButton("Add Patron");
 		JPanel finishedPanel = new JPanel();
