@@ -15,7 +15,9 @@ public class ScoreHistoryFile {
 		throws IOException, FileNotFoundException {
 
 		String data = nick + "\t" + date + "\t" + score + "\n";
-
+database db=new database();
+		db.insert(nick,date,score);
+		db.selectAll();
 		RandomAccessFile out = new RandomAccessFile(SCOREHISTORY_DAT, "rw");
 		out.skipBytes((int) out.length());
 		out.writeBytes(data);
