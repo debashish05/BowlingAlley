@@ -1,10 +1,12 @@
 public class ScoreCalculator {
 
-    private int[][] cumulScores;
-    private int bowlIndex;
+    public int[][] cumulScores;
+    public int bowlIndex;
+    private int penalty;
 
     public ScoreCalculator(int bowlVal) {
         bowlIndex = bowlVal;
+        penalty = 0;
     }
 
     public void setBowlIndex(int val) {
@@ -18,10 +20,11 @@ public class ScoreCalculator {
                 cumulScores[i][j] = 0;
             }
         }
+        penalty= 0;
     }
 
     public int getFinalScore() {
-        return cumulScores[bowlIndex][9];
+        return cumulScores[bowlIndex][9]-penalty;
     }
 
     public int[][] getCumulScores() {
@@ -34,6 +37,7 @@ public class ScoreCalculator {
         int prev = cumulScores[bowlIndex][0];
         int curr = 0, diff = 0;
 
+        cell=Math.min(9,cell);
         for (int j = 1; j <= cell; j++) {
             curr = cumulScores[bowlIndex][j];
             diff = curr - prev;
@@ -70,6 +74,10 @@ public class ScoreCalculator {
     public boolean scoreHelper(int i, int current, int[] curScore) {
 
         int now_score = curScore[i];
+        if(now_score==0 || now_score==-1)
+        {
+            penalty+=calculateMaxSum(cumulScores, i/2, bowlIndex)/2;
+        }
 
         if (i % 2 == 1 && i < 19) {
             if (now_score == -2 && curScore[i - 1] == -2) {
@@ -94,6 +102,7 @@ public class ScoreCalculator {
 
     public int getScore(int frame, int ball, int[] curScore) { // remove return type,remove total score
         int totalScore = 0;
+        
         for (int i = 0; i < 10; i++) {
             cumulScores[bowlIndex][i] = 0;
         }
@@ -105,7 +114,7 @@ public class ScoreCalculator {
             if (scoreHelper(i, current, curScore))
                 break;
         }
-
+        
         return totalScore;
     }
 
