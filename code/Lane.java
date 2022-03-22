@@ -192,6 +192,125 @@ public class Lane extends Thread implements PinsetterObserver {
 	 * entry point for execution of this lane
 	 */
 
+	public void tie() {
+		System.out.println("Resolving Tie");
+		if (party.getMembers().size() > 1) {
+
+			Vector<Integer> vec = new Vector<Integer>();
+			for (int i = 0; i < party.getMembers().size(); ++i) 
+			{
+				vec.add(currentCumulScores.cumulScores[i][9]);
+			}
+			Collections.sort(vec);
+			int second_highest_score, highest_score;
+			second_highest_score = vec.get(party.getMembers().size() - 2);
+			highest_score = vec.get(party.getMembers().size() - 1);
+			for (int i = 0; i < party.getMembers().size(); ++i) {
+				if (second_highest_score == currentCumulScores.cumulScores[i][9])
+					second_highest = i;
+				if (highest_score == currentCumulScores.cumulScores[i][9])
+					highest = i;
+			}
+
+			NewTieLane newLane = new NewTieLane();
+			Vector<String> vec2 = new Vector();
+			vec2.add(((Bowler) party.getMembers().get(highest)).getNickName());
+			vec2.add(((Bowler) party.getMembers().get(second_highest)).getNickName());
+			newLane.receiveLaneEvent(vec2);
+			newLane.show();
+			frameNumber++;
+			canThrowAgain = true;
+			tenthFrameStrike = false;
+			ball = -1;
+			int bowlerID = 1, frame_no = 0;
+			boolean value = true;
+			int[] score_val, cell_no;
+			score_val = new int[2];
+			boolean[] prev_strike, pins;
+			pins = new boolean[10];
+			prev_strike = new boolean[2];
+			prev_strike[0] = false;
+			prev_strike[1] = false;
+
+			cell_no = new int[2];
+			cell_no[0] = 1;
+			cell_no[1] = 0;
+			Random rnd = new Random();
+
+			int i = 0;
+			while (i < 10) {
+				pins[i] = true;
+				i = i + 1;
+			}
+			while (value && frame_no < 3) {
+				int count = 0; // Initializing count
+				double skill = rnd.nextDouble(); // skill? Another random variable
+
+				ThrowWindow new_throw = new ThrowWindow();
+				new_throw.getResult();
+				new_throw.destroy();
+
+				i = 0;
+				while (i < 10) {
+					if (pins[i]) { // If pins[i] is still not knocked down
+						double pinluck = rnd.nextDouble();
+
+						if (((skill + pinluck) / 2.0 * 1.2) > .5) { // Improve the calc here
+							pins[i] = false; // Some random math to put the pin down
+						}
+						if (!pins[i]) {
+							count++;
+						}
+					}
+					i = i + 1;
+				}
+
+				System.out.format("Count:%d\n", count);
+				if (ball == -1) {
+					newLane.changeScore(bowlerID, second_highest_score + count, frame_no);
+					newLane.changeBall(bowlerID, count, cell_no[1]++);
+				} else {
+
+					newLane.changeBall(bowlerID, count, cell_no[bowlerID]++);
+				}
+				score_val[bowlerID] += count;
+				if (second_highest_score + count > highest_score && ball == -1) {
+					score_val[bowlerID] = second_highest_score;
+					score_val[bowlerID] += count;
+
+					if (bowlerID == 1)
+						bowlerID = 0;
+					score_val[bowlerID] = highest_score;
+					ball = 0;
+
+				} else if (ball == -1)
+					value = false;
+				else {
+					ball++;
+					if (ball == 2) {
+						i = 0;
+						while (i < 10) {
+							pins[i] = true;
+							i = i + 1;
+						}
+						newLane.changeScore(bowlerID, score_val[bowlerID], frame_no);
+						ball = 0;
+						if (bowlerID == 1)
+							frame_no++;
+						bowlerID = 1 - bowlerID;
+
+					}
+				}
+
+			}
+			if (ball != -1) {
+				currentCumulScores.cumulScores[highest][9] = score_val[0];
+				currentCumulScores.cumulScores[second_highest][9] = score_val[1];
+			}
+
+		}
+	}
+
 	public void gameNotFinished() {
 		while (gameIsHalted) {
 			try {
@@ -239,143 +358,10 @@ public class Lane extends Thread implements PinsetterObserver {
 			bowlIndex = 0;
 			currentCumulScores.setBowlIndex(bowlIndex);
 			if (frameNumber > 9) {
-				// *******************************************************
-				if (party.getMembers().size() > 1) {
-					System.out.println("answer: Roy");
-					Vector<Integer> vec = new Vector<Integer>();
-					for (int i = 0; i < party.getMembers().size(); ++i) {
-						// System.out.format("highest_i:%d",i);
-						vec.add(currentCumulScores.cumulScores[i][9]);
-					}
-					Collections.sort(vec);
-					int second_highest_score, highest_score;
-					second_highest_score = vec.get(party.getMembers().size() - 2);
-					highest_score = vec.get(party.getMembers().size() - 1);
-					for (int i = 0; i < party.getMembers().size(); ++i) {
-						if (second_highest_score == currentCumulScores.cumulScores[i][9])
-							second_highest = i;
-						if (highest_score == currentCumulScores.cumulScores[i][9])
-							highest = i;
-					}
-					System.out.format("highest:%s", ((Bowler) party.getMembers().get(highest)).getNickName());
-					System.out.format("Second Highest:%s",
-							((Bowler) party.getMembers().get(second_highest)).getNickName());
-					NewLane newLane = new NewLane();
-					Vector<String> vec2 = new Vector();
-					vec2.add(((Bowler) party.getMembers().get(highest)).getNickName());
-					vec2.add(((Bowler) party.getMembers().get(second_highest)).getNickName());
-					newLane.receiveLaneEvent(vec2);
-					newLane.show();
-					frameNumber++;
-					canThrowAgain = true;
-					tenthFrameStrike = false;
-					ball = -1;
-					int bowlerID = 1;
-					int frame_no = 0;
-					boolean value = true;
-					int[] score_val;
-					score_val = new int[2];
-					boolean[] prev_strike;
-					prev_strike = new boolean[2];
-					prev_strike[0] = false;
-					prev_strike[1] = false;
-					int[] cell_no;
-					cell_no = new int[2];
-					cell_no[0] = 1;
-					cell_no[1] = 0;
-					boolean[] pins;
-					boolean foul;
-					Random rnd;
-					pins = new boolean[10];
-					rnd = new Random();
-					for (int i = 0; i <= 9; i++) {
-						pins[i] = true; // pins[i] == true --> Pins are standing
-					}
-					while (value && frame_no < 3) {
-						int count = 0; // Initializing count
-						foul = false;
-						double skill = rnd.nextDouble(); // skill? Another random variable
-
-						ThrowWindow new_throw = new ThrowWindow();
-						int result = new_throw.getResult();
-						new_throw.destroy();
-
-						for (int i = 0; i <= 9; i++) {
-							if (pins[i]) { // If pins[i] is still not knocked down
-								double pinluck = rnd.nextDouble();
-								if (pinluck <= .04) {
-									foul = true; // Puts foul here... But how is the foul per pin. And if it is a foul
-													// shouldn't the rest of the pins not be calculated?
-								}
-								if (((skill + pinluck) / 2.0 * 1.2) > .5) { // Improve the calc here
-									pins[i] = false; // Some random math to put the pin down
-								}
-								if (!pins[i]) { // this pin just knocked down
-									count++; // Increaes the count
-								}
-							}
-						}
-						if (count == 10) {
-							Smiley emoticon = new Smiley(0);
-							emoticon = null;
-						}
-						if (count == 0) {
-							Smiley emoticon = new Smiley(1);
-							emoticon = null;
-						}
-						System.out.format("Count:%d\n", count);
-						if (ball == -1) {
-							newLane.changeScore(bowlerID, second_highest_score + count, frame_no);
-							newLane.changeBall(bowlerID, count, cell_no[1]++);
-						} else {
-
-							newLane.changeBall(bowlerID, count, cell_no[bowlerID]++);
-						}
-						score_val[bowlerID] += count;
-						if (second_highest_score + count > highest_score && ball == -1) {
-							score_val[bowlerID] = second_highest_score;
-							score_val[bowlerID] += count;
-
-							if (bowlerID == 1)
-								bowlerID = 0;
-							score_val[bowlerID] = highest_score;
-							ball = 0;
-
-						} else if (ball == -1)
-							value = false;
-						else {
-							ball++;
-							if (ball == 2) {
-								for (int i = 0; i <= 9; i++) {
-									pins[i] = true; // pins[i] == true --> Pins are standing
-								}
-								newLane.changeScore(bowlerID, score_val[bowlerID], frame_no);
-								ball = 0;
-								if (bowlerID == 1)
-									frame_no++;
-								if (bowlerID == 0)
-									bowlerID = 1;
-								else
-									bowlerID = 0;
-							}
-						}
-
-						try {
-							sleep(100);
-						} catch (Exception e) {
-						}
-					}
-					if (ball != -1) {
-						currentCumulScores.cumulScores[highest][9] = score_val[0];
-						currentCumulScores.cumulScores[second_highest][9] = score_val[1];
-					}
-
-				}
+				tie();
 				gameFinished = true;
 				gameNumber++;
 			}
-
-			// *******************************************************
 
 		}
 	}
